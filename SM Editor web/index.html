@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SM EDITOR - Servicios de Edición de Video</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e40af;
+            --light-blue: #3b82f6;
+            --sky-blue: #0ea5e9;
+            --light-sky: #e0f2fe;
+            --white: #ffffff;
+            --gray-100: #f1f5f9;
+            --gray-800: #1e293b;
+            --shadow: rgba(59, 130, 246, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, var(--light-sky) 0%, var(--white) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
+        }
+
+        .logo-container {
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-placeholder {
+            color: var(--light-blue);
+            font-size: 2rem;
+            font-weight: bold;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-placeholder img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            background: transparent;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding:  0;
+        }
+
+        .section {
+            background: white;
+            margin: 2rem 0;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+        }
+
+        .section h2 {
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sky-blue), var(--light-blue));
+            border-radius: 2px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, var(--light-sky) 0%, white 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--sky-blue);
+            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--light-blue);
+        }
+
+        .service-card h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .video-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-sky) 0%, var(--sky-blue) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        .video-info h4 {
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .video-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--gray-800) 0%, var(--primary-blue) 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--sky-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 2rem 1rem;
+            }
+            
+            .services-grid,
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        h1 {
+             margin: 0 auto;
+    width: fit-content; /* o un ancho específico */
+        }
+
+        h3 {
+            margin: 0 auto;
+    width: fit-content; /* o un ancho específico */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo-placeholder">
+                    <img src="Logo/Logo_Sm.png" alt="Logo" />
+                </div>
+            </div>
+            <h1>SM VIDEO EDITOR</h1>
+            <p>Servicios Profesionales de Edición de Video</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+
+            <centre><H3><p>🎬 Bienvenidos a SM Editor 🎬</p></H3></centre>
+<p>Somos Sander Cuasapás y Matías Cuasapás, un equipo creativo apasionado por contar historias a través del video. Nos especializamos en edición profesional de video para todo tipo de contenido: redes sociales, proyectos personales, empresariales, videoclips, eventos y mucho más.</p>
+Transformamos tus ideas en videos impactantes, dinámicos y con estilo propio.
+<p>🔧 Calidad, creatividad y puntualidad en cada proyecto.</H4></centre></p>
+            <!-- Services Section -->
+            <section class="section animate-fade-in">
+              
+                <h2>Nuestros Servicios</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">🎬</div>
+                        <h3>Edición Profesional</h3>
+                        <p>Transformamos tu material en bruto en contenido profesional y atractivo con técnicas avanzadas de edición.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🎨</div>
+                        <h3>Motion Graphics</h3>
+                        <p>Añadimos efectos visuales, animaciones y gráficos en movimiento para dar vida a tus videos.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🎵</div>
+                        <h3>Audio y Sonido</h3>
+                        <p>Mejoramos la calidad del audio, añadimos música de fondo y efectos sonoros profesionales.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🎯</div>
+                        <h3>Contenido para Redes</h3>
+                        <p>Creamos contenido optimizado para plataformas como Instagram, TikTok, YouTube y más.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📱</div>
+                        <h3>Videos Corporativos</h3>
+                        <p>Producimos videos promocionales, presentaciones y contenido empresarial de alta calidad.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">⚡</div>
+                        <h3>Edición Rápida</h3>
+                        <p>Servicio express para proyectos con plazos ajustados sin comprometer la calidad.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio Section -->
+            <section class="section animate-fade-in">
+                <h2>Nuestro Portafolio</h2>
+                <div class="portfolio-grid" id="portfolioGrid">
+                    <div class="video-card">
+                        <div class="video-placeholder"><img src="Portafolio/Colombiamoda.png"></div>
+                        <div class="video-info">
+                             <a href="https://drive.google.com/file/d/1YjZvIUNJazhimBe-q-0RUAnr4kE9lM2x/view?usp=sharing"><h4>Video Promocional - Colombiamoda</h4></a>
+                            <p>Video promocional con transiciones, subtitulos, voz en off(IA), y zooms.</p>
+
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-placeholder"><img a src="Portafolio/Caso_Agricola.png"></div>
+                        <div class="video-info">
+                             <a href="https://drive.google.com/file/d/1-qelUJfXBiGyhh1fVxegtsr-BUPXZ5YR/view?usp=sharing"><h4>Cortometraje Universitario - Caso Agricola San Felipe</h4></a>
+                            <p>Video con transiciones, efectos de video, sonido, voz en off (IA), Titulos Y Subtitulos.</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-placeholder"><img src="Portafolio/Emprende_S.png"></div>
+                        <div class="video-info">
+                            <a href="https://drive.google.com/file/d/1CieEhjT5gni9o2tUPV_wu-fyDoIldVSQ/view?usp=sharing"><h4>Video Universitario para redes - Emprende sin miedo</h4></a>
+                            <p>Podcast universitario para Youtube con transiciones suaves, mejoras de audio, efectos y superposiciones.</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-placeholder"><img a src="Portafolio/Despedida.png"></div>
+                        <div class="video-info">
+                             <a href="https://drive.google.com/file/d/17Kx0F8ctOukhOxSgR4ugt1-_4l33HlSb/view?usp=sharing"><h4>Video de niños - Graduacion Kinder</h4></a>
+                            <p>Video con transiciones, efectos de video, sonido,musica , Titulos Y Subtitulos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+        </section>
+        <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+
+
+              
+    
+            <!-- Portfolio Section Intros -->
+            <section class="section animate-fade-in">
+                <h2>Intro para canal de youtube</h2>
+                <div class="portfolio-grid" id="portfolioGrid">
+                    <div class="video-card">
+                        <div class="video-placeholder"><img src="Portafolio/intro1.png"></div>
+                        <div class="video-info">
+                             <a href="https://drive.google.com/file/d/1Wb7WAKifKoY4atVkjdgvptU1F8K0KppZ/view?usp=sharing"><h4>Intro N1</h4></a>
+                            <p>Intro corto para un canal de motivación.</p>
+
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-placeholder"><img a src="Portafolio/intro2.png"></div>
+                        <div class="video-info">
+                             <a href="https://drive.google.com/file/d/1KOJjCFrn6j8kS3nyC1I6HUc0L-0fWemZ/view?usp=sharing"><h4>Intro N2</h4></a>
+                            <p>Intro general</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <centre><h1>¡Contactanos!</h1></centre>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <span>svideoeditorm@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📱</span>
+                    <span>+593 963615550</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <span>Quito, Ecuador</span>
+                </div>
+            </div>
+            <p>&copy; 2025 Sm editor. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    
+</body>
+</html>
